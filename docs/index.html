@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Security Engineering — Defensive Tooling Portfolio · Anish Guntreddi</title>
+  <meta name="description" content="Three production-grade, defensive security tools — SecretHawk (secret scanning), WebShield (web config auditing), and AuthLab (secure OAuth/session education). 205 tests, all green." />
+  <meta name="color-scheme" content="dark" />
+  <!-- Set .js before paint so reveal animations are progressive enhancement (no-JS shows all content). -->
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Security Engineering — Defensive Tooling Portfolio" />
+  <meta property="og:description" content="SecretHawk · WebShield · AuthLab — defensive, educational security tooling. 205 tests, all green." />
+
+  <!-- Self-hosted fonts: no third-party request, no Subresource-Integrity gap. -->
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+</head>
+<body>
+
+  <!-- ====================== NAV ====================== -->
+  <nav class="nav" aria-label="Primary">
+    <a class="nav__brand" href="#top" aria-label="Security Engineering — home">
+      <svg class="nav__mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3Z" stroke="#5eead4" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="m8.5 12 2.4 2.4L16 9" stroke="#5eead4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>secure<span class="accent">//</span>engineering</span>
+    </a>
+    <div class="nav__links">
+      <a class="nav__link" href="#tools" data-navlink>tools</a>
+      <a class="nav__link" href="#verification" data-navlink>verification</a>
+      <a class="nav__link" href="#about" data-navlink>about</a>
+      <a class="nav__link nav__cta btn btn--ghost" href="https://github.com/Anish-Guntreddi/securityengineering" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </nav>
+
+  <!-- ====================== HERO ====================== -->
+  <header class="section hero" id="top">
+    <div class="wrap hero__grid">
+      <div>
+        <span class="kicker">Defensive Security Portfolio</span>
+        <h1 class="hero__title">Security tooling<br />that <span class="glitch">proves itself.</span></h1>
+        <p class="hero__lead">Three production-grade defensive tools — built, tested end-to-end, and verified against concrete green gates. No demos that only work in slides.</p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#tools">
+            Explore the tools
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="https://github.com/Anish-Guntreddi/securityengineering" target="_blank" rel="noopener">View source ↗</a>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat__num">3</div>
+            <div class="stat__label">defensive tools</div>
+          </div>
+          <div class="stat">
+            <div class="stat__num"><span class="accent">205</span></div>
+            <div class="stat__label">tests passing</div>
+          </div>
+          <div class="stat">
+            <div class="stat__num">100<span class="accent">%</span></div>
+            <div class="stat__label">gates green</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- hero terminal: a "scan-all" readout that types out -->
+      <div class="terminal hero__term reveal" data-typeout aria-label="Terminal showing a portfolio-wide scan summary">
+        <div class="terminal__bar" aria-hidden="true">
+          <span class="terminal__dot terminal__dot--r"></span>
+          <span class="terminal__dot terminal__dot--y"></span>
+          <span class="terminal__dot terminal__dot--g"></span>
+          <span class="terminal__title">~/securityengineering — scan</span>
+        </div>
+        <div class="terminal__body">
+          <span data-line data-delay="280"><span class="t-prompt">$</span> ./portfolio <span class="t-flag">--scan-all</span></span>
+          <span data-line data-delay="360"><span class="t-key">[secrethawk]</span> walking working tree · <span class="t-dim">15 rules + entropy</span></span>
+          <span data-line data-delay="240">  <span class="t-pass">✓</span> 5 findings · previews redacted · SARIF 2.1.0</span>
+          <span data-line data-delay="360"><span class="t-key">[webshield]</span>  audit https://target.you-own · <span class="t-dim">13 checks</span></span>
+          <span data-line data-delay="240">  <span class="t-pass">✓</span> grade A–F computed · <span class="t-warn">read-only</span></span>
+          <span data-line data-delay="360"><span class="t-key">[authlab]</span>    OAuth Auth-Code + <span class="t-flag">PKCE</span> · session rotation</span>
+          <span data-line data-delay="240">  <span class="t-pass">✓</span> refresh rotation · insecure demos sandboxed</span>
+          <span data-line data-delay="320"><span class="t-dim">─────────────────────────────────────────────</span></span>
+          <span data-line data-delay="200">status: <span class="t-pass">205/205 tests green</span> · 3 tools · <span class="t-warn">defensive only</span><span class="cursor" aria-hidden="true"></span></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====================== MANIFESTO ====================== -->
+  <section class="section manifesto" aria-label="Operating principles">
+    <div class="wrap">
+      <div class="manifesto__grid reveal">
+        <div class="manifesto__cell">
+          <svg class="manifesto__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6l-7-3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <h3>Defensive &amp; educational</h3>
+          <p>Detection, auditing, and teaching — never offensive exploitation. No auto-revocation, no weaponized payloads, no detection evasion.</p>
+        </div>
+        <div class="manifesto__cell">
+          <svg class="manifesto__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 11v5m0-9h.01M5 8.5 12 4l7 4.5v7L12 20l-7-4.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <h3>Authorized targets only</h3>
+          <p>Scan repos you own. Audit sites you own or are authorized to test. WebShield refuses to run without an explicit authorization flag.</p>
+        </div>
+        <div class="manifesto__cell">
+          <svg class="manifesto__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4 13 4 4L20 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Verified, not asserted</h3>
+          <p>Every tool ships a fixture-based test suite that checks detections <em>and</em> non-detections. The green gate is the definition of done.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== TOOLS ====================== -->
+  <section class="section" id="tools">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">The Toolkit</span>
+        <h2>Three tools across the security lifecycle.</h2>
+        <p>Detection, auditing, and education — each a self-contained, tested project with a clean, pure core and a thin I/O shell.</p>
+      </div>
+    </div>
+
+    <div class="wrap tools">
+
+      <!-- 01 SecretHawk -->
+      <article class="tool reveal">
+        <div class="wrap" style="padding:0">
+        <div class="tool__grid">
+          <div>
+            <span class="tool__index">01 / DETECTION</span>
+            <h3 class="tool__name">SecretHawk</h3>
+            <p class="tool__tag">Scan your own Git repos for leaked keys, tokens, and credentials — before they ship.</p>
+            <div class="tool__chips">
+              <span class="chip chip--accent">Python</span>
+              <span class="chip chip--accent">CLI</span>
+              <span class="chip chip--pass">90 tests</span>
+              <span class="chip chip--info">SARIF 2.1.0</span>
+            </div>
+            <ul class="feat">
+              <li><b>Hybrid detection</b> — 15 format-specific rules (AWS, GitHub, Stripe, Slack, private keys, JWTs…) plus a <b>Shannon-entropy</b> heuristic for generic high-randomness strings.</li>
+              <li><b>Low false positives by design</b> — path globs, regex allowlists, and inline <span class="mono accent">secrethawk:ignore</span> pragmas. Tests assert non-detections, not just hits.</li>
+              <li><b>CI-native</b> — SARIF for GitHub code scanning, JSON for pipelines, and a composite GitHub Action that fails the build on new findings.</li>
+              <li><b>Safe output</b> — previews are redacted to first-4 / last-2 chars; the raw secret never reaches the report.</li>
+            </ul>
+            <div class="tool__links">
+              <a class="btn btn--ghost" href="https://github.com/Anish-Guntreddi/securityengineering/tree/main/secrethawk" target="_blank" rel="noopener">Source ↗</a>
+              <a class="btn btn--ghost" href="https://github.com/Anish-Guntreddi/securityengineering/blob/main/secrethawk/README.md" target="_blank" rel="noopener">README ↗</a>
+            </div>
+          </div>
+          <div class="terminal readout" aria-label="SecretHawk example output">
+            <div class="terminal__bar" aria-hidden="true">
+              <span class="terminal__dot terminal__dot--r"></span><span class="terminal__dot terminal__dot--y"></span><span class="terminal__dot terminal__dot--g"></span>
+              <span class="terminal__title">secrethawk scan .</span>
+            </div>
+            <div class="terminal__body">
+<span class="t-prompt">$</span> secrethawk scan . <span class="t-flag">--format sarif</span>
+<span class="t-fail">[CRITICAL]</span> stripe-secret-key (rule)
+   config.py:6:15 · <span class="t-dim">sk_l***********34</span>
+<span class="t-fail">[CRITICAL]</span> private-key (rule)
+   keys/id_rsa:1:1 · <span class="t-dim">----*********--</span>
+<span class="t-warn">[HIGH]</span>     github-pat (rule)
+   config.py:5:17 · <span class="t-dim">ghp_***********89</span>
+<span class="t-warn">[MEDIUM]</span>   high-entropy-string (entropy)
+   config.py:9:24 · <span class="t-dim">g7Xq**********Qo</span>
+<span class="t-dim">────────────────────────────</span>
+5 findings · exit <span class="t-fail">1</span> · clean tree → exit <span class="t-pass">0</span>
+            </div>
+          </div>
+        </div>
+        </div>
+      </article>
+
+      <!-- 02 WebShield -->
+      <article class="tool reveal">
+        <div class="wrap" style="padding:0">
+        <div class="tool__grid">
+          <div>
+            <span class="tool__index">02 / AUDITING</span>
+            <h3 class="tool__name">WebShield</h3>
+            <p class="tool__tag">Audit a site you own for common security-configuration issues — read-only, with a letter grade.</p>
+            <div class="tool__chips">
+              <span class="chip chip--accent">Python</span>
+              <span class="chip chip--accent">CLI</span>
+              <span class="chip chip--pass">59 tests</span>
+              <span class="chip chip--warn">read-only</span>
+            </div>
+            <ul class="feat">
+              <li><b>13 checks, 5 families</b> — security headers (CSP, HSTS, frame-options…), TLS/HTTPS, cookie flags (Secure / HttpOnly / SameSite), CORS misconfiguration, and reflected-input <em>detection</em>.</li>
+              <li><b>Graded report</b> — every check is pass / warn / fail with remediation guidance, rolled up to an overall A–F grade.</li>
+              <li><b>Safe by construction</b> — GET-only, non-destructive, no weaponized payloads, and a hard <span class="mono accent">--i-am-authorized</span> gate it refuses to run without.</li>
+              <li><b>Pure checks</b> — each check is a function over a recorded <span class="mono">Probe</span>, so good/bad fixtures verify verdicts with zero network.</li>
+            </ul>
+            <div class="tool__links">
+              <a class="btn btn--ghost" href="https://github.com/Anish-Guntreddi/securityengineering/tree/main/webshield" target="_blank" rel="noopener">Source ↗</a>
+              <a class="btn btn--ghost" href="https://github.com/Anish-Guntreddi/securityengineering/blob/main/webshield/README.md" target="_blank" rel="noopener">README ↗</a>
+            </div>
+          </div>
+          <div class="terminal readout" aria-label="WebShield example output">
+            <div class="terminal__bar" aria-hidden="true">
+              <span class="terminal__dot terminal__dot--r"></span><span class="terminal__dot terminal__dot--y"></span><span class="terminal__dot terminal__dot--g"></span>
+              <span class="terminal__title">webshield scan</span>
+            </div>
+            <div class="terminal__body">
+<span class="t-prompt">$</span> webshield scan https://example.com <span class="t-flag">--i-am-authorized</span>
+ <span class="t-fail">FAIL</span>  Content-Security-Policy        <span class="t-dim">headers.csp</span>
+ <span class="t-fail">FAIL</span>  Strict-Transport-Security      <span class="t-dim">headers.hsts</span>
+ <span class="t-pass">PASS</span>  HTTPS in use                   <span class="t-dim">tls.https</span>
+ <span class="t-warn">WARN</span>  Modern TLS version (≥ 1.2)     <span class="t-dim">tls.version</span>
+ <span class="t-pass">PASS</span>  Reflected input                <span class="t-dim">reflected.input</span>
+<span class="t-dim">────────────────────────────</span>
+overall grade: <span class="t-fail">F</span>  ·  13 checks  ·  no auth → exit <span class="t-fail">2</span>
+            </div>
+          </div>
+        </div>
+        </div>
+      </article>
+
+      <!-- 03 AuthLab -->
+      <article class="tool reveal">
+        <div class="wrap" style="padding:0">
+        <div class="tool__grid">
+          <div>
+            <span class="tool__index">03 / EDUCATION</span>
+            <h3 class="tool__name">AuthLab</h3>
+            <p class="tool__tag">An educational playground contrasting secure and insecure OAuth &amp; session patterns — by example.</p>
+            <div class="tool__chips">
+              <span class="chip chip--accent">Next.js 16</span>
+              <span class="chip chip--accent">Prisma</span>
+              <span class="chip chip--pass">56 tests</span>
+              <span class="chip chip--info">PKCE</span>
+            </div>
+            <ul class="feat">
+              <li><b>Correct by the book</b> — Authorization Code + <b>PKCE</b> (S256) against a self-contained mock provider, server-side token exchange, and constant-time state validation.</li>
+              <li><b>Session hardening</b> — HttpOnly / Secure / SameSite cookies, high-entropy session IDs, rotation on privilege change, and refresh-token rotation with <b>reuse detection</b>.</li>
+              <li><b>Secure-vs-insecure, side by side</b> — three loudly-labeled anti-pattern demos (token-in-localStorage, missing-state, missing-PKCE), each paired with its fix.</li>
+              <li><b>Sandboxed</b> — insecure routes are isolated from the real flow (tests enforce it); no real users, providers, or credentials anywhere.</li>
+            </ul>
+            <div class="tool__links">
+              <a class="btn btn--ghost" href="https://github.com/Anish-Guntreddi/securityengineering/tree/main/authlab" target="_blank" rel="noopener">Source ↗</a>
+              <a class="btn btn--ghost" href="https://github.com/Anish-Guntreddi/securityengineering/blob/main/authlab/README.md" target="_blank" rel="noopener">README ↗</a>
+            </div>
+          </div>
+          <div class="terminal readout" aria-label="AuthLab example output">
+            <div class="terminal__bar" aria-hidden="true">
+              <span class="terminal__dot terminal__dot--r"></span><span class="terminal__dot terminal__dot--y"></span><span class="terminal__dot terminal__dot--g"></span>
+              <span class="terminal__title">authlab — secure flow</span>
+            </div>
+            <div class="terminal__body">
+<span class="t-prompt">$</span> npm test <span class="t-dim"># vitest</span>
+<span class="t-key">login</span>    → verifier+challenge+state, <span class="t-warn">HttpOnly</span> cookies
+<span class="t-key">authorize</span>→ code bound to S256 challenge
+<span class="t-key">token</span>    → correct verifier <span class="t-pass">✓</span> · wrong verifier <span class="t-fail">✗ 400</span>
+<span class="t-key">callback</span> → state validated · session issued
+<span class="t-key">refresh</span>  → rotate token · <span class="t-fail">reuse detected</span>
+<span class="t-dim">────────────────────────────</span>
+6 files · <span class="t-pass">56 passed</span> · build <span class="t-pass">✓</span> · lint <span class="t-pass">✓</span>
+            </div>
+          </div>
+        </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ====================== VERIFICATION ====================== -->
+  <section class="section" id="verification">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">Done = Green</span>
+        <h2>The gate decides when it&rsquo;s finished.</h2>
+        <p>Each project defines concrete verification gates — the green signal that the work is actually done, not just plausible-looking. Here they are, all passing.</p>
+      </div>
+      <hr class="scanline" style="margin-bottom:2.5rem" />
+      <div class="verify__grid">
+
+        <div class="card gatecard reveal">
+          <h3>SecretHawk <span class="count mono">90 ✓</span></h3>
+          <ul class="gatelist">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Every planted secret found; every allowlisted / benign string suppressed.</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>SARIF validates against the vendored schema; malformed SARIF rejected.</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Non-zero exit on a planted tree; zero on a clean tree.</li>
+          </ul>
+        </div>
+
+        <div class="card gatecard reveal">
+          <h3>WebShield <span class="count mono">59 ✓</span></h3>
+          <ul class="gatelist">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Correct pass / warn / fail on recorded good &amp; bad fixtures.</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Reflected-input check fails on a vulnerable app, passes on a safe one.</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Refuses to run without the authorized-target confirmation flag.</li>
+          </ul>
+        </div>
+
+        <div class="card gatecard reveal">
+          <h3>AuthLab <span class="count mono">56 ✓</span></h3>
+          <ul class="gatelist">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>End-to-end secure flow: PKCE verifier/challenge, state, session issuance.</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Insecure demos labeled &amp; isolated; cookie flags verified on responses.</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Production build &amp; lint succeed (exit 0).</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== ABOUT ====================== -->
+  <section class="section about" id="about">
+    <div class="wrap about__grid">
+      <div class="reveal">
+        <span class="kicker">About</span>
+        <h2 class="tool__name" style="font-size:var(--fs-h2);margin-top:1rem">Security engineering, end to end.</h2>
+        <p>Most portfolios skip security. This one leans in: detection, configuration auditing, and secure-design education — the work that backend, platform, and AppSec teams actually value.</p>
+        <p>Every tool here follows the same discipline — a <b>pure, testable core</b> wrapped in a thin I/O shell, a fixture suite that proves both what it catches and what it ignores, and an explicit authorized-use posture. The result is software you can trust to be honest about when it&rsquo;s done.</p>
+        <div class="tool__links" style="margin-top:1.6rem">
+          <a class="btn btn--primary" href="mailto:anishguntreddi@gmail.com">Get in touch</a>
+          <a class="btn btn--ghost" href="https://github.com/Anish-Guntreddi" target="_blank" rel="noopener">@Anish-Guntreddi ↗</a>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="card" style="padding:1.6rem">
+          <div class="readout__row"><span class="k">Languages</span><span class="v mono">Python · TypeScript</span></div>
+          <div class="readout__row"><span class="k">Detection</span><span class="v mono">regex · Shannon entropy</span></div>
+          <div class="readout__row"><span class="k">Reporting</span><span class="v mono">SARIF · JSON · graded</span></div>
+          <div class="readout__row"><span class="k">Auth</span><span class="v mono">OAuth2 · PKCE · sessions</span></div>
+          <div class="readout__row"><span class="k">Stack</span><span class="v mono">Next.js · Prisma · Flask</span></div>
+          <div class="readout__row"><span class="k">Testing</span><span class="v mono">pytest · vitest</span></div>
+          <div class="readout__row"><span class="k">CI</span><span class="v mono">GitHub Actions</span></div>
+        </div>
+        <div class="stacklist" style="margin-top:1rem">
+          <span class="stacktag">static analysis</span>
+          <span class="stacktag">HTTP security</span>
+          <span class="stacktag">OAuth / PKCE</span>
+          <span class="stacktag">CLI design</span>
+          <span class="stacktag">SARIF</span>
+          <span class="stacktag">CI integration</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== FOOTER ====================== -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div>
+          <a class="nav__brand" href="#top">
+            <svg class="nav__mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3Z" stroke="#5eead4" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="m8.5 12 2.4 2.4L16 9" stroke="#5eead4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>secure<span class="accent">//</span>engineering</span>
+          </a>
+          <p class="footer__note" style="margin-top:1.2rem">Authorized use only. These are defensive, educational tools — scan repos you own, audit sites you own or are authorized to test. No offensive tooling, no real credentials.</p>
+        </div>
+        <nav class="footer__links" aria-label="Footer">
+          <a href="https://github.com/Anish-Guntreddi/securityengineering" target="_blank" rel="noopener">Repository ↗</a>
+          <a href="https://github.com/Anish-Guntreddi/securityengineering/tree/main/secrethawk" target="_blank" rel="noopener">SecretHawk ↗</a>
+          <a href="https://github.com/Anish-Guntreddi/securityengineering/tree/main/webshield" target="_blank" rel="noopener">WebShield ↗</a>
+          <a href="https://github.com/Anish-Guntreddi/securityengineering/tree/main/authlab" target="_blank" rel="noopener">AuthLab ↗</a>
+          <a href="mailto:anishguntreddi@gmail.com">anishguntreddi@gmail.com</a>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <span>© <span data-year>2026</span> Anish Guntreddi · MIT License</span>
+        <span>205/205 tests green · built with discipline, not vibes</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/console.js" defer></script>
+</body>
+</html>
