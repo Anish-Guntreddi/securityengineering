@@ -1,0 +1,77 @@
+// AuthLab Prisma schema (educational sandbox).
+//
+// Datasource is SQLite for zero-config local/test runs. To switch to
+// PostgreSQL it is a ONE-LINE change: set `provider = "postgresql"` below
+// (and point the `url` in prisma.config.ts / DATABASE_URL at your Postgres
+// instance, swapping the better-sqlite3 driver adapter in lib/db.ts for
+// @prisma/adapter-pg). No model changes are required.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  // ONE-LINE SWITCH: change "sqlite" -> "postgresql" to use Postgres.
+  provider = "sqlite"
+}
+
+/// A server-side session. The session id (cookie value) is a high-entropy
+/// random token; we additionally store a hash so a DB leak does not directly
+/// reveal usable cookie values. `revokedAt` lets us invalidate on rotation.
+model Session {
+  id        String    @id // high-entropy random id (also the cookie value)
+  userRef   String // opaque pseudo-user reference (NO real user/PII)
+  role      String    @default("user") // used to demonstrate privilege change
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  revokedAt DateTime? // set when rotated/destroyed -> session no longer valid
+
+  refreshTokens RefreshToken[]
+}
+
+/// A refresh token in a rotation family. Each rotation issues a NEW token and
+/// marks the previous one `rotatedAt`. Presenting an already-rotated token is
+/// REUSE and must trigger family revocation (token theft detection).
+model RefreshToken {
+  id        String    @id // high-entropy random id (the token value)
+  familyId  String // rotation family; reuse anywhere revokes the whole family
+  sessionId String
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  rotatedAt DateTime? // set when this token has been exchanged for a new one
+  revokedAt DateTime? // set when the family is revoked (e.g. reuse detected)
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([familyId])
+}
+
+/// Transient state for the in-flight Authorization Code + PKCE dance. Stores
+/// the anti-CSRF `state` and the PKCE `codeChallenge` so the callback can be
+/// validated. Short-lived; consumed exactly once.
+model AuthRequest {
+  id            String    @id // high-entropy random id
+  state         String    @unique // anti-CSRF token
+  codeChallenge String // PKCE S256 challenge
+  challengeMethod String  @default("S256")
+  redirectUri   String
+  clientId      String
+  createdAt     DateTime  @default(now())
+  expiresAt     DateTime
+  consumedAt    DateTime? // set once the callback completes (single-use)
+}
+
+/// Authorization codes issued by the mock OAuth provider. Bound to the PKCE
+/// challenge so /token can verify the verifier. Single-use.
+model AuthCode {
+  id            String    @id // the authorization code value (high-entropy)
+  clientId      String
+  redirectUri   String
+  codeChallenge String
+  challengeMethod String  @default("S256")
+  userRef       String
+  createdAt     DateTime  @default(now())
+  expiresAt     DateTime
+  consumedAt    DateTime? // single-use
+}
