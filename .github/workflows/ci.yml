@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  secrethawk:
+    name: SecretHawk (pytest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: secrethawk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest -q
+
+  webshield:
+    name: WebShield (pytest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: webshield
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest -q
+
+  authlab:
+    name: AuthLab (vitest + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: authlab
+    env:
+      CI: "1"
+      DATABASE_URL: "file:./prisma/dev.db"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: authlab/package-lock.json
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm test
+      - run: npm run build
