@@ -1,0 +1,23 @@
+{
+  "url": "https://secure.example.com/",
+  "status_code": 200,
+  "headers": {
+    "Content-Type": "text/html; charset=utf-8",
+    "Content-Security-Policy": "default-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "geolocation=(), camera=(), microphone=()"
+  },
+  "set_cookie": [
+    "sid=abc123; Secure; HttpOnly; SameSite=Lax"
+  ],
+  "tls": {
+    "https": true,
+    "redirects_http_to_https": true,
+    "tls_version": "TLSv1.3",
+    "hsts": true
+  },
+  "body": "<html><body><h1>Secure site</h1></body></html>"
+}

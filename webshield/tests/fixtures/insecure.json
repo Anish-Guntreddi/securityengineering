@@ -1,0 +1,21 @@
+{
+  "url": "http://insecure.example.com/",
+  "status_code": 200,
+  "headers": {
+    "Content-Type": "text/html; charset=utf-8",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": "true",
+    "X-Frame-Options": "ALLOWALL"
+  },
+  "set_cookie": [
+    "sid=abc123",
+    "tracking=xyz; SameSite=None"
+  ],
+  "tls": {
+    "https": false,
+    "redirects_http_to_https": false,
+    "tls_version": null,
+    "hsts": false
+  },
+  "body": "<html><body><h1>Insecure site</h1></body></html>"
+}
