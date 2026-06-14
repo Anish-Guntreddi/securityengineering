@@ -1,0 +1,37 @@
+name: Secret Scan
+
+# Example workflow showing how to use the SecretHawk composite action to scan
+# your own repository and surface findings in GitHub code scanning.
+#
+# AUTHORIZED USE: only run this against repositories you own or are explicitly
+# authorized to assess.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write  # required to upload SARIF to code scanning
+
+jobs:
+  secrethawk:
+    name: SecretHawk scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history (enables optional --history scans)
+
+      - name: Run SecretHawk
+        # In a real consumer repo this would be:
+        #   uses: your-org/secrethawk@v0.1.0
+        # Here we reference the action that lives in this repository.
+        uses: ./
+        with:
+          path: "."
+          output: "results.sarif"
+          fail-on-findings: "true"

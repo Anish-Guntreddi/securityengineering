@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://json.schemastore.org/sarif-2.1.0.json",
+  "title": "Static Analysis Results Format (SARIF) Version 2.1.0",
+  "description": "A vendored, faithful subset of the SARIF 2.1.0 schema sufficient to validate SecretHawk output and reject malformed documents.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["$schema", "version", "runs"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "version": {
+      "type": "string",
+      "enum": ["2.1.0"]
+    },
+    "runs": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/run" }
+    }
+  },
+  "definitions": {
+    "run": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["tool"],
+      "properties": {
+        "tool": { "$ref": "#/definitions/tool" },
+        "results": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/result" }
+        }
+      }
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["driver"],
+      "properties": {
+        "driver": { "$ref": "#/definitions/toolComponent" }
+      }
+    },
+    "toolComponent": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string" },
+        "informationUri": { "type": "string" },
+        "rules": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/reportingDescriptor" }
+        }
+      }
+    },
+    "reportingDescriptor": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string" },
+        "shortDescription": { "$ref": "#/definitions/message" },
+        "defaultConfiguration": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "level": { "$ref": "#/definitions/level" }
+          }
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["message"],
+      "properties": {
+        "ruleId": { "type": "string" },
+        "ruleIndex": { "type": "integer", "minimum": -1 },
+        "level": { "$ref": "#/definitions/level" },
+        "message": { "$ref": "#/definitions/message" },
+        "locations": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/location" }
+        }
+      }
+    },
+    "message": {
+      "type": "object",
+      "additionalProperties": true,
+      "anyOf": [
+        { "required": ["text"] },
+        { "required": ["id"] }
+      ],
+      "properties": {
+        "text": { "type": "string" },
+        "id": { "type": "string" }
+      }
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "physicalLocation": { "$ref": "#/definitions/physicalLocation" }
+      }
+    },
+    "physicalLocation": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["artifactLocation"],
+      "properties": {
+        "artifactLocation": { "$ref": "#/definitions/artifactLocation" },
+        "region": { "$ref": "#/definitions/region" }
+      }
+    },
+    "artifactLocation": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["uri"],
+      "properties": {
+        "uri": { "type": "string" }
+      }
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "startLine": { "type": "integer", "minimum": 1 },
+        "startColumn": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "level": {
+      "type": "string",
+      "enum": ["none", "note", "warning", "error"]
+    }
+  }
+}
